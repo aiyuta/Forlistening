@@ -31,6 +31,7 @@ def Youglish():
         height=600,
     )
 
+
 def main():
     st.set_page_config(page_title="Language Leaning")
     # Set up tkinter
@@ -43,18 +44,22 @@ def main():
     # Folder picker button
     st.title('Enjoy Learning')
     st.write('Please select an audio folder:')
+    if 'folder_path' not in st.session_state:
+        st.session_state.folder_path = None
     clicked = st.button('Folder Picker')
     if clicked:
-        folder_path = st.text_input('Selected folder:', filedialog.askdirectory(master=root))
+        #folder_path = st.text_input('Selected folder:', filedialog.askdirectory(master=root))
+        folder_path= filedialog.askdirectory(master=root)
 
-
-    #folder_path = st.sidebar.text_input("Enter folder path", "")
-
-    # Check if folder path is valid
+        # Check if folder path is valid
         if not os.path.isdir(folder_path):
             st.warning("Please enter a valid folder path")
-            return
+        else:
+            # Store the folder path in the session state
+            st.session_state.folder_path = folder_path
 
+    if st.session_state.folder_path:
+        folder_path = st.session_state.folder_path
         # Display list of available audio files in the selected folder
         audio_files = list_files(folder_path)
         st.write(f"Found {len(audio_files)} audio files in {folder_path}")
